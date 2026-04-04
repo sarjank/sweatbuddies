@@ -1,0 +1,120 @@
+.profile-page {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e94560;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-header h1 {
+  margin: 0;
+  color: #1a1a2e;
+}
+
+.profile-email {
+  color: #888;
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pstat {
+  flex: 1;
+  background: #1a1a2e;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.pstat-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e94560;
+}
+
+.pstat-label {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 0.25rem;
+}
+
+.profile-page h2 {
+  color: #1a1a2e;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.history-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.type-badge {
+  background: #e9456022;
+  color: #e94560;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.history-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.muted {
+  color: #888;
+}
+
+.small {
+  font-size: 0.8rem;
+}
