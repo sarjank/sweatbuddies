@@ -1,87 +1,159 @@
 .feed-page {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  padding: 1rem 1rem calc(var(--bottom-nav-h) + 1rem);
 }
 
 .feed-page h1 {
-  color: #1a1a2e;
-  margin-bottom: 1.5rem;
-}
-
-.muted {
-  color: #888;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
 }
 
 .feed-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .feed-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.25rem;
-  display: flex;
-  gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
 }
 
-.feed-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #1a1a2e;
-  color: #e94560;
-  font-size: 1.1rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.feed-body {
-  flex: 1;
-}
-
-.feed-top {
+.feed-card-top {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.feed-type {
-  background: #e9456022;
-  color: #e94560;
-  padding: 0.15rem 0.5rem;
-  border-radius: 20px;
-  font-size: 0.72rem;
+.feed-user {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.feed-user strong {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.feed-handle {
+  color: var(--accent);
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
-.feed-title {
-  margin: 0.1rem 0 0.4rem;
-  font-size: 1rem;
-  color: #222;
+.feed-type-badge {
+  background: var(--bg-card-2);
+  color: var(--text-sub);
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
 }
 
-.feed-meta {
+.feed-note {
+  color: var(--text-sub);
+  font-size: 0.87rem;
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
+.feed-card-bottom {
   display: flex;
-  gap: 1rem;
-  font-size: 0.8rem;
-  color: #888;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .feed-date {
-  color: #bbb;
+  color: var(--text-muted);
+  font-size: 0.78rem;
 }
 
-.feed-notes {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #666;
-  font-style: italic;
+.like-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.like-btn:hover:not(:disabled) {
+  border-color: var(--red);
+}
+
+.like-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.like-btn--liked {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.like-heart { font-size: 0.95rem; line-height: 1; }
+.like-count { font-size: 0.82rem; }
+
+/* ── Error state ─────────────────────────────────────────── */
+.feed-error {
+  background: #2a0a0a;
+  border: 1px solid var(--red)44;
+  color: var(--red);
+  border-radius: var(--radius);
+  padding: 1rem;
+  font-size: 0.88rem;
+}
+
+.feed-error-detail {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+  word-break: break-all;
+}
+
+/* ── Skeleton loader ─────────────────────────────────────── */
+.feed-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.feed-card-skel {
+  height: 88px;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+
+.feed-card-skel:nth-child(2) { animation-delay: 0.15s; }
+.feed-card-skel:nth-child(3) { animation-delay: 0.3s; }
+.feed-card-skel:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes skel-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── PB badge ────────────────────────────────────────────── */
+.pb-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffd700;
+  background: #2a2200;
+  border: 1px solid #ffd70033;
+  border-radius: 10px;
+  padding: 0.15rem 0.45rem;
+  white-space: nowrap;
 }

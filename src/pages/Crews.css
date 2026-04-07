@@ -1,0 +1,214 @@
+.crews-page {
+  padding: 1rem 1rem calc(var(--bottom-nav-h) + 1rem);
+}
+
+.crews-page h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+/* ── Tabs ────────────────────────────────────────────────── */
+.crews-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+
+/* reuse .tab-btn from Friends.css via global scope */
+
+/* ── Crew list ───────────────────────────────────────────── */
+.crews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.crew-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+.crew-card:hover { border-color: var(--accent)55; }
+
+.crew-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.crew-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.crew-goal-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--accent)22;
+  color: var(--accent);
+  border: 1px solid var(--accent)44;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+.crew-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.crew-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.crew-avatar-wrap {
+  margin-right: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+}
+
+.crew-avatar-more {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-left: 14px;
+}
+
+.crew-member-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.crews-empty {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-create-crew {
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── Create form ─────────────────────────────────────────── */
+.crew-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.crew-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.crew-field-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.crew-field-opt {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.crew-input {
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.crew-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.crew-input::placeholder { color: var(--text-muted); }
+
+.crew-char-count {
+  position: absolute;
+  bottom: 0.55rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.crew-select {
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9rem;
+  appearance: none;
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.crew-select:focus { outline: none; border-color: var(--accent); }
+
+.crew-error {
+  color: var(--red);
+  font-size: 0.85rem;
+  background: #2a0a0a;
+  border: 1px solid var(--red)44;
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+}
+
+.btn-crew-submit {
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-crew-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-crew-submit:hover:not(:disabled) { opacity: 0.88; }
+
+/* ── Skeleton ────────────────────────────────────────────── */
+.crew-card-skel {
+  height: 88px;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}

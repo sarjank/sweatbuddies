@@ -1,0 +1,324 @@
+.crew-detail-page {
+  padding: 1rem 1rem calc(var(--bottom-nav-h) + 1rem);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.crew-detail-header {
+  margin-bottom: 1.25rem;
+}
+
+.crew-back-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.crew-detail-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 0.4rem;
+}
+
+/* ── Flash ───────────────────────────────────────────────── */
+.crew-flash {
+  background: #0d2e12;
+  border: 1px solid #2e7d3244;
+  color: #66bb6a;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+/* ── Sections ────────────────────────────────────────────── */
+.crew-section {
+  margin-bottom: 1.75rem;
+}
+
+.crew-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.crew-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.crew-section-row .crew-section-title { margin-bottom: 0; }
+
+.crew-edit-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── All-met banner ──────────────────────────────────────── */
+.crew-all-met {
+  background: linear-gradient(135deg, #1a2a0a, #1e3a10);
+  border: 1px solid var(--accent)44;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.9rem;
+  text-align: center;
+}
+
+/* ── Goal progress ───────────────────────────────────────── */
+.crew-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.crew-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.crew-progress-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.crew-progress-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.crew-progress-bar-wrap {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.crew-progress-bar {
+  height: 100%;
+  background: var(--accent)88;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.crew-progress-bar--met {
+  background: var(--accent);
+}
+
+.crew-progress-stat {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+.crew-progress-stat--met { color: var(--accent); }
+
+/* ── Members list ────────────────────────────────────────── */
+.crew-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.crew-member-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+}
+
+.crew-member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  flex: 1;
+}
+
+.crew-member-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.crew-creator-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--accent)22;
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 0.1rem 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.crew-member-handle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ── Add member ──────────────────────────────────────────── */
+.crew-add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.crew-not-found {
+  font-size: 0.85rem;
+  color: var(--red);
+  margin-top: 0.4rem;
+}
+
+.crew-search-result {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.crew-sr-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.crew-sr-info strong { color: var(--text); font-size: 0.9rem; }
+
+.crew-already-in {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ── Goal section ────────────────────────────────────────── */
+.crew-current-goal {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.crew-no-goal { color: var(--text-muted); font-weight: 400; }
+
+.crew-goal-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* reuse .crew-select from Crews.css */
+.crew-select {
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9rem;
+  appearance: none;
+  cursor: pointer;
+  color-scheme: dark;
+  width: 100%;
+}
+
+.crew-select:focus { outline: none; border-color: var(--accent); }
+
+.btn-crew-submit {
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-crew-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Danger zone ─────────────────────────────────────────── */
+.crew-danger-zone {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.btn-danger {
+  background: #2a0a0a;
+  color: var(--red);
+  border: 1px solid var(--red)44;
+  border-radius: 10px;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: 100%;
+}
+
+.btn-danger:hover:not(:disabled) { background: #3a0e0e; }
+.btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-danger--secondary {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+.crew-detail-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1rem;
+}
+
+.crew-member-skel {
+  height: 60px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+
+.crew-member-skel:nth-child(2) { animation-delay: 0.15s; }
+.crew-member-skel:nth-child(3) { animation-delay: 0.3s; }
+.crew-member-skel:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes skel-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 0.25; }
+}

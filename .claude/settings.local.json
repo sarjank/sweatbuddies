@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/seedTestUsers.mjs)",
+      "Bash(gh auth:*)",
+      "Bash(New-Item -ItemType File -Path \"c:/Users/sarja/Projects/sweatbuddies/public/.nojekyll\" -Force)",
+      "Bash(Out-Null)"
+    ]
+  }
+}

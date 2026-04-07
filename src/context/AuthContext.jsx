@@ -10,6 +10,9 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { randomMonsterType } from "../components/MonsterAvatar/MonsterAvatar";
+import { autoAcceptEmailInvites } from "../utils/invites";
+import { generateHandleFromName, checkHandleAvailable } from "../utils/handle";
 
 const AuthContext = createContext();
 
@@ -22,22 +25,29 @@ export function AuthProvider({ children }) {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  async function register(email, password, displayName) {
+  async function register(email, password, displayName, handle) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName });
+    const monsterType = randomMonsterType();
     await setDoc(doc(db, "users", result.user.uid), {
       uid: result.user.uid,
       displayName,
+      handle: handle.toLowerCase(),
       email,
+      monsterType,
       createdAt: serverTimestamp(),
       friends: [],
       workoutCount: 0,
+      badges: [],
     });
+    await autoAcceptEmailInvites(email, result.user.uid);
     return result;
   }
 
   async function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    await autoAcceptEmailInvites(email, result.user.uid);
+    return result;
   }
 
   async function loginWithGoogle() {
@@ -45,15 +55,29 @@ export function AuthProvider({ children }) {
     const result = await signInWithPopup(auth, provider);
     const userDoc = await getDoc(doc(db, "users", result.user.uid));
     if (!userDoc.exists()) {
+      const monsterType = randomMonsterType();
+      // Generate a handle from display name; keep trying until available
+      let handle = generateHandleFromName(result.user.displayName || "user");
+      let available = await checkHandleAvailable(handle, db);
+      let attempts = 0;
+      while (!available && attempts < 5) {
+        handle = generateHandleFromName(result.user.displayName || "user");
+        available = await checkHandleAvailable(handle, db);
+        attempts++;
+      }
       await setDoc(doc(db, "users", result.user.uid), {
         uid: result.user.uid,
         displayName: result.user.displayName,
+        handle,
         email: result.user.email,
+        monsterType,
         createdAt: serverTimestamp(),
         friends: [],
         workoutCount: 0,
+        badges: [],
       });
     }
+    await autoAcceptEmailInvites(result.user.email, result.user.uid);
     return result;
   }
 
@@ -76,7 +100,15 @@ export function AuthProvider({ children }) {
     return unsub;
   }, []);
 
-  const value = { currentUser, userProfile, register, login, loginWithGoogle, logout, fetchUserProfile };
+  const value = {
+    currentUser,
+    userProfile,
+    register,
+    login,
+    loginWithGoogle,
+    logout,
+    fetchUserProfile,
+  };
 
   return (
     <AuthContext.Provider value={value}>

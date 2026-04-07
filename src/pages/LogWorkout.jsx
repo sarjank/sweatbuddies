@@ -1,60 +1,106 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, serverTimestamp, updateDoc, doc, increment } from "firebase/firestore";
+import {
+  collection, addDoc, serverTimestamp, doc, increment,
+  writeBatch
+} from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
+import { todayDateStr } from "../utils/streak";
+import { hasPBThisWeek } from "../utils/personalBest";
+import { computeBadges } from "../utils/badges";
 import "./LogWorkout.css";
 
-const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Cycling", "Running", "Swimming", "Other"];
+const TYPES = [
+  { key: "cardio", label: "Cardio", icon: "🏃" },
+  { key: "weights", label: "Weights", icon: "🏋️" },
+  { key: "both", label: "Both", icon: "🔥" },
+];
 
 export default function LogWorkout() {
-  const { currentUser } = useAuth();
+  const { currentUser, userProfile, fetchUserProfile } = useAuth();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("Strength");
-  const [duration, setDuration] = useState("");
-  const [notes, setNotes] = useState("");
-  const [exercises, setExercises] = useState([{ name: "", sets: "", reps: "", weight: "" }]);
+
+  const today = todayDateStr();
+  const minDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 30);
+    return d.toISOString().slice(0, 10);
+  })();
+
+  const [workoutDate, setWorkoutDate] = useState(today);
+  const [selectedType, setSelectedType] = useState(null);
+  const [note, setNote] = useState("");
+  const [isPersonalBest, setIsPersonalBest] = useState(false);
+  const [pbAllowed, setPbAllowed] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
 
-  function addExercise() {
-    setExercises([...exercises, { name: "", sets: "", reps: "", weight: "" }]);
-  }
+  useEffect(() => {
+    async function checkPB() {
+      const has = await hasPBThisWeek(currentUser.uid, db);
+      setPbAllowed(!has);
+    }
+    checkPB();
+  }, [currentUser]);
 
-  function updateExercise(index, field, value) {
-    const updated = [...exercises];
-    updated[index][field] = value;
-    setExercises(updated);
-  }
-
-  function removeExercise(index) {
-    setExercises(exercises.filter((_, i) => i !== index));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSelect(type) {
+    if (loading) return;
+    setSelectedType(type);
     setError("");
-    if (!title.trim()) return setError("Please enter a workout title.");
     setLoading(true);
     try {
-      const filteredExercises = exercises.filter((ex) => ex.name.trim());
+      const newCount = (userProfile?.workoutCount || 0) + 1;
+      const newBadges = computeBadges(newCount).map((b) => b.id);
+
       await addDoc(collection(db, "workouts"), {
         uid: currentUser.uid,
-        displayName: currentUser.displayName,
-        title: title.trim(),
+        displayName: userProfile?.displayName || currentUser.displayName,
+        handle: userProfile?.handle || "",
+        monsterType: userProfile?.monsterType || "goblin",
         type,
-        duration: Number(duration) || 0,
-        notes: notes.trim(),
-        exercises: filteredExercises,
+        note: note.trim(),
+        workoutDate: workoutDate,
         createdAt: serverTimestamp(),
+        isPersonalBest: pbAllowed && isPersonalBest,
+        likes: [],
       });
-      await updateDoc(doc(db, "users", currentUser.uid), {
+
+      const batch = writeBatch(db);
+      batch.update(doc(db, "users", currentUser.uid), {
         workoutCount: increment(1),
+        badges: newBadges,
       });
-      navigate("/dashboard");
+
+      if (pbAllowed && isPersonalBest && userProfile?.friends?.length) {
+        for (const friendUid of userProfile.friends) {
+          const notifRef = doc(collection(db, "notifications"));
+          batch.set(notifRef, {
+            uid: friendUid,
+            type: "personal_best",
+            actorName: userProfile?.displayName || "",
+            actorHandle: userProfile?.handle || "",
+            actorMonsterType: userProfile?.monsterType || "goblin",
+            read: false,
+            createdAt: serverTimestamp(),
+          });
+        }
+      }
+      await batch.commit();
+      await fetchUserProfile(currentUser.uid);
+
+      setSaved(true);
+      setNote("");
+      setIsPersonalBest(false);
+      setSelectedType(null);
+      setTimeout(() => {
+        setSaved(false);
+        navigate("/feed");
+      }, 900);
     } catch (err) {
-      setError("Failed to save workout. Try again.");
+      setError("Failed to save. Please try again.");
+      setSelectedType(null);
     }
     setLoading(false);
   }
@@ -62,91 +108,69 @@ export default function LogWorkout() {
   return (
     <div className="log-page">
       <h1>Log Workout</h1>
-      {error && <div className="form-error">{error}</div>}
-      <form onSubmit={handleSubmit} className="log-form">
-        <div className="form-row">
-          <div className="form-group">
-            <label>Workout Title</label>
-            <input
-              type="text"
-              placeholder="e.g. Morning Push Day"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Type</label>
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-              {WORKOUT_TYPES.map((t) => <option key={t}>{t}</option>)}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Duration (min)</label>
-            <input
-              type="number"
-              placeholder="45"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              min="1"
-            />
-          </div>
-        </div>
 
-        <div className="form-group">
-          <label>Exercises</label>
-          <div className="exercises-list">
-            {exercises.map((ex, i) => (
-              <div key={i} className="exercise-row">
-                <input
-                  placeholder="Exercise name"
-                  value={ex.name}
-                  onChange={(e) => updateExercise(i, "name", e.target.value)}
-                />
-                <input
-                  placeholder="Sets"
-                  type="number"
-                  value={ex.sets}
-                  onChange={(e) => updateExercise(i, "sets", e.target.value)}
-                  min="1"
-                />
-                <input
-                  placeholder="Reps"
-                  type="number"
-                  value={ex.reps}
-                  onChange={(e) => updateExercise(i, "reps", e.target.value)}
-                  min="1"
-                />
-                <input
-                  placeholder="Weight (lbs)"
-                  type="number"
-                  value={ex.weight}
-                  onChange={(e) => updateExercise(i, "weight", e.target.value)}
-                  min="0"
-                />
-                {exercises.length > 1 && (
-                  <button type="button" className="btn-remove" onClick={() => removeExercise(i)}>✕</button>
-                )}
-              </div>
+      <div className="log-date-row">
+        <label className="log-date-label">Workout date</label>
+        <input
+          type="date"
+          className="log-date-input"
+          value={workoutDate}
+          min={minDate}
+          max={today}
+          onChange={(e) => { setWorkoutDate(e.target.value); setSelectedType(null); }}
+        />
+      </div>
+
+      {saved ? (
+        <div className="log-saved">
+          <span>✓</span> Workout logged!
+        </div>
+      ) : (
+        <>
+          <p className="log-prompt">What did you crush?</p>
+          <div className="log-buttons">
+            {TYPES.map(({ key, label }) => (
+              <button
+                key={key}
+                className={`log-type-btn log-type-btn--${key}${selectedType === key ? " log-type-btn--active" : ""}`}
+                onClick={() => handleSelect(key)}
+                disabled={loading}
+              >
+                <span className={`log-monster-img log-monster-img--${key}`} aria-hidden="true" />
+                <span className="log-type-label">{label}</span>
+              </button>
             ))}
           </div>
-          <button type="button" onClick={addExercise} className="btn-add-exercise">+ Add Exercise</button>
-        </div>
 
-        <div className="form-group">
-          <label>Notes (optional)</label>
-          <textarea
-            placeholder="How did it go? Any PRs?"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={3}
-          />
-        </div>
+          <div className="log-note-row">
+            <textarea
+              className="log-note"
+              placeholder="Add a note… (optional, 140 chars)"
+              value={note}
+              maxLength={140}
+              onChange={(e) => setNote(e.target.value)}
+              rows={2}
+            />
+            <span className="log-note-count">{note.length}/140</span>
+          </div>
 
-        <button type="submit" disabled={loading} className="btn-submit">
-          {loading ? "Saving..." : "Save Workout"}
-        </button>
-      </form>
+          {pbAllowed ? (
+            <label className="log-pb-label">
+              <input
+                type="checkbox"
+                checked={isPersonalBest}
+                onChange={(e) => setIsPersonalBest(e.target.checked)}
+              />
+              <span>🏆 Mark as Personal Best this week</span>
+            </label>
+          ) : (
+            <p className="log-pb-set">🏆 PB already set this week</p>
+          )}
+
+          {error && <div className="log-error">{error}</div>}
+          <p className="log-hint">Tap a workout type above to log instantly.</p>
+        </>
+      )}
     </div>
   );
 }

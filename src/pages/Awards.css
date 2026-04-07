@@ -1,0 +1,226 @@
+.awards-page {
+  padding: 1rem 1rem calc(var(--bottom-nav-h) + 1rem);
+}
+
+.awards-header-row h1 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* ── Month selector ─────────────────────────────────────── */
+.awards-month-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.awards-month-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 160px;
+  text-align: center;
+}
+
+.awards-month-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.awards-month-btn:hover:not(:disabled) { background: #222; }
+.awards-month-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── Award list ─────────────────────────────────────────── */
+.awards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.award-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.award-card--won {
+  border-color: #2a2a2a;
+}
+
+.award-card--locked {
+  opacity: 1;
+  border-color: #222;
+  background: #111;
+}
+
+/* ── Icon circle ────────────────────────────────────────── */
+.award-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #1e1e1e;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.award-icon-emoji {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+/* ── Text body ──────────────────────────────────────────── */
+.award-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.award-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.award-label--locked {
+  color: #555;
+}
+
+.awards-none-yet {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.25rem 0 0.75rem;
+}
+
+.award-locked-icon {
+  font-size: 0.85rem;
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.award-desc {
+  font-size: 0.78rem;
+  color: #444;
+  line-height: 1.35;
+}
+
+.award-card--won .award-desc {
+  color: var(--text-muted);
+}
+
+/* ── Earner avatars ─────────────────────────────────────── */
+.award-earners {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.award-earner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Override MonsterAvatar size to fit 26px */
+.award-earner .monster-avatar {
+  width: 26px !important;
+  height: 26px !important;
+  border-width: 1px;
+}
+
+.award-earners-more {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-left: 0.1rem;
+}
+
+/* ── Won indicator dot ──────────────────────────────────── */
+.award-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ── Crew awards section ─────────────────────────────────── */
+.crew-awards-section {
+  margin-top: 1.75rem;
+}
+
+.crew-awards-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.award-card--crew {
+  border-color: #fbbf2444;
+  background: linear-gradient(135deg, #1a1400 0%, #1e1800 100%);
+}
+
+.crew-award-members {
+  margin-top: 0.15rem;
+  color: #fbbf24 !important;
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+.awards-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.award-card-skel {
+  height: 76px;
+  border-radius: 16px;
+  background: var(--bg-card);
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+
+.award-card-skel:nth-child(2) { animation-delay: 0.1s; }
+.award-card-skel:nth-child(3) { animation-delay: 0.2s; }
+.award-card-skel:nth-child(4) { animation-delay: 0.3s; }
+.award-card-skel:nth-child(5) { animation-delay: 0.4s; }
+.award-card-skel:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes skel-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 0.25; }
+}
