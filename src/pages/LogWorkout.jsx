@@ -14,7 +14,7 @@ import "./LogWorkout.css";
 const TYPES = [
   { key: "cardio", label: "Cardio", icon: "🏃" },
   { key: "weights", label: "Weights", icon: "🏋️" },
-  { key: "both", label: "Both", icon: "🔥" },
+  { key: "both", label: "Monster Mode!", sublabel: "Weights & Cardio", icon: "🔥" },
 ];
 
 export default function LogWorkout() {
@@ -129,7 +129,7 @@ export default function LogWorkout() {
         <>
           <p className="log-prompt">What did you crush?</p>
           <div className="log-buttons">
-            {TYPES.map(({ key, label }) => (
+            {TYPES.map(({ key, label, sublabel }) => (
               <button
                 key={key}
                 className={`log-type-btn log-type-btn--${key}${selectedType === key ? " log-type-btn--active" : ""}`}
@@ -137,7 +137,10 @@ export default function LogWorkout() {
                 disabled={loading}
               >
                 <span className={`log-monster-img log-monster-img--${key}`} aria-hidden="true" />
-                <span className="log-type-label">{label}</span>
+                <span className="log-type-text">
+                  <span className="log-type-label">{label}</span>
+                  {sublabel && <span className="log-type-sublabel">{sublabel}</span>}
+                </span>
               </button>
             ))}
           </div>

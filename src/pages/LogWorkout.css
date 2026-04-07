@@ -128,7 +128,9 @@
 .log-monster-img--weights { background-position: 50% center; }
 .log-monster-img--both    { background-position: 100% center; }
 
+.log-type-text { display: flex; flex-direction: column; }
 .log-type-label { font-size: 1.2rem; font-weight: 800; }
+.log-type-sublabel { font-size: 0.72rem; font-weight: 500; opacity: 0.75; }
 
 .log-note-row {
   position: relative;
