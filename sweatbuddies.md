@@ -521,6 +521,25 @@ Implementation:
 
 ---
 
+## Test Users
+
+Eight seeded Firestore-only users for testing crews, friends, and feed without needing to create real Auth accounts. Created via `node scripts/seedTestUsers.mjs`. Remove with `node scripts/seedTestUsers.mjs --delete`.
+
+| Handle | Name | Monster | Workout Count |
+|--------|------|---------|---------------|
+| `@alexr` | Alex Rivera | goblin | 14 |
+| `@samchen` | Sam Chen | blob | 9 |
+| `@jellis` | Jordan Ellis | robo | 22 |
+| `@cmorgan` | Casey Morgan | yeti | 5 |
+| `@tkim` | Taylor Kim | cactus | 31 |
+| `@rstone` | Riley Stone | ghost | 7 |
+| `@mpatel` | Morgan Patel | dragon | 18 |
+| `@qfoster` | Quinn Foster | fungi | 3 |
+
+Search for any handle in **Buddies → Find by @handle** to add as a friend, then add to a crew via **Crews → Crew Detail → Add Member**.
+
+---
+
 ## Verification Plan
 
 - **Phase 1:**
