@@ -106,6 +106,24 @@
 .like-heart { font-size: 0.95rem; line-height: 1; }
 .like-count { font-size: 0.82rem; }
 
+/* ── Workout delete ───────────────────────────────────────── */
+.workout-delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  margin-left: 2px;
+}
+.workout-delete-btn:hover {
+  color: var(--red);
+  background: #e9456011;
+}
+
 /* ── Error state ─────────────────────────────────────────── */
 .feed-error {
   background: #2a0a0a;

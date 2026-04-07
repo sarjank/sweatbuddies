@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import {
   collection, query, where, onSnapshot,
-  doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp
+  doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp,
+  deleteDoc, increment
 } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
@@ -51,6 +52,14 @@ export default function Feed() {
     return unsub;
   }, [currentUser, userProfile]);
 
+  async function handleDeleteWorkout(workout) {
+    if (!window.confirm("Delete this workout? This can't be undone.")) return;
+    await deleteDoc(doc(db, "workouts", workout.id));
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      workoutCount: increment(-1),
+    });
+  }
+
   async function toggleLike(workout) {
     if (likingId === workout.id) return;
     setLikingId(workout.id);
@@ -98,6 +107,7 @@ export default function Feed() {
               currentUid={currentUser.uid}
               onLike={toggleLike}
               likingId={likingId}
+              onDelete={handleDeleteWorkout}
             />
           ))}
         </div>

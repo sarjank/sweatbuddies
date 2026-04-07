@@ -177,6 +177,17 @@ export default function CrewDetail() {
     await batch.commit();
   }
 
+  async function handleRemoveMember(memberUid) {
+    const memberName = members.find((m) => m.uid === memberUid)?.displayName || "this member";
+    if (!window.confirm(`Remove ${memberName} from the crew?`)) return;
+    const batch = writeBatch(db);
+    batch.update(doc(db, "crews", crewId), { members: arrayRemove(memberUid) });
+    batch.update(doc(db, "users", memberUid), { crews: arrayRemove(crewId) });
+    await batch.commit();
+    flash(`${memberName} removed from the crew.`);
+    load();
+  }
+
   async function handleLeave() {
     if (!window.confirm(`Leave "${crew.name}"?`)) return;
     setLeaving(true);
@@ -297,6 +308,13 @@ export default function CrewDetail() {
                 </span>
                 {m.handle && <span className="crew-member-handle">@{m.handle}</span>}
               </div>
+              {isCreator && m.uid !== currentUser.uid && (
+                <button
+                  className="crew-remove-btn"
+                  onClick={() => handleRemoveMember(m.uid)}
+                  aria-label={`Remove ${m.displayName}`}
+                >Remove</button>
+              )}
             </div>
           ))}
         </div>

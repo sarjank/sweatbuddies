@@ -508,6 +508,37 @@ Implementation:
 
 ---
 
+## Phase 7: Delete & Correction Actions
+
+**Goal:** Let users undo mistakes — delete their own workouts, crew creators remove members, and friends remove each other.
+
+---
+
+### 7.1 Delete a Workout
+**Files:** `src/components/Workouts/WorkoutCard.jsx`, `src/pages/Feed.jsx`, `src/pages/Profile.jsx`
+
+- A small `×` delete button appears in the top-right of every `WorkoutCard` **only when `workout.uid === currentUser.uid`** (i.e. it's the logged-in user's own workout).
+- Tapping it calls `onDelete(workout)`, which triggers a `window.confirm` dialog before permanently deleting.
+- On confirm: `deleteDoc` the workout document, then `updateDoc` the user's `users` doc with `increment(-1)` on `workoutCount`.
+- The deletion is reflected immediately (optimistic update via Firestore `onSnapshot` in Feed; local state removal in Profile).
+- `onDelete` is an optional prop — if not passed the button does not render (e.g. on a future public profile view).
+
+### 7.2 Crew Creator: Remove Member
+**File:** `src/pages/CrewDetail.jsx`
+
+- In the Members list, each member row shows a **"Remove"** button visible only to the crew creator, and only on members who are **not** the creator themselves.
+- Tapping triggers `window.confirm`, then a batch write: `arrayRemove` the member's uid from `crews/{crewId}.members` and `arrayRemove` the crewId from `users/{memberUid}.crews`.
+- The page reloads the crew data after removal.
+
+### 7.3 Remove a Friend (Buddy)
+**File:** `src/pages/Friends.jsx`
+
+- In the "Your Buddies" tab, each friend card shows a **"Remove"** button.
+- Tapping triggers `window.confirm`, then a batch write: `arrayRemove` each uid from the other's `friends[]` array (mutual unfriend).
+- `fetchUserProfile` is called after to keep the local `userProfile` in sync.
+
+---
+
 ## File Map — Critical Paths
 
 | Phase | Files to Modify | Files to Create |

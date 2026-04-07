@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc, doc, updateDoc, increment } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import MonsterAvatar from "../components/MonsterAvatar/MonsterAvatar";
@@ -18,15 +18,25 @@ export default function Profile() {
     async function fetchWorkouts() {
       const q = query(
         collection(db, "workouts"),
-        where("uid", "==", currentUser.uid),
-        orderBy("workoutDate", "desc")
+        where("uid", "==", currentUser.uid)
       );
       const snap = await getDocs(q);
-      setWorkouts(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      docs.sort((a, b) => (b.workoutDate || "").localeCompare(a.workoutDate || ""));
+      setWorkouts(docs);
       setLoading(false);
     }
     fetchWorkouts();
   }, [currentUser]);
+
+  async function handleDeleteWorkout(workout) {
+    if (!window.confirm("Delete this workout? This can't be undone.")) return;
+    await deleteDoc(doc(db, "workouts", workout.id));
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      workoutCount: increment(-1),
+    });
+    setWorkouts((prev) => prev.filter((w) => w.id !== workout.id));
+  }
 
   const dates = workouts.map((w) => w.workoutDate).filter(Boolean);
   const streak = calcStreak(dates);
@@ -97,7 +107,14 @@ export default function Profile() {
                 </div>
                 {w.isPersonalBest && <span className="pb-badge">🏆 PB</span>}
               </div>
-              <span className="history-date">{formatWorkoutDate(w.workoutDate)}</span>
+              <div className="history-right">
+                <span className="history-date">{formatWorkoutDate(w.workoutDate)}</span>
+                <button
+                  className="history-delete-btn"
+                  onClick={() => handleDeleteWorkout(w)}
+                  aria-label="Delete workout"
+                >×</button>
+              </div>
             </div>
           ))}
         </div>

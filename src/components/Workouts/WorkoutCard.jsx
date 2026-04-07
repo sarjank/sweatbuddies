@@ -4,10 +4,11 @@ import { formatWorkoutDate } from "../../utils/streak";
 
 const TYPE_ICONS = { cardio: "🏃", weights: "🏋️", both: "🔥" };
 
-const WorkoutCard = memo(function WorkoutCard({ workout, currentUid, onLike, likingId }) {
+const WorkoutCard = memo(function WorkoutCard({ workout, currentUid, onLike, likingId, onDelete }) {
   const w = workout;
   const liked = w.likes?.includes(currentUid);
   const likeCount = w.likes?.length || 0;
+  const isOwn = w.uid === currentUid;
 
   return (
     <div className="feed-card">
@@ -21,6 +22,13 @@ const WorkoutCard = memo(function WorkoutCard({ workout, currentUid, onLike, lik
           {TYPE_ICONS[w.type]} {w.type}
         </div>
         {w.isPersonalBest && <span className="pb-badge">🏆 PB</span>}
+        {isOwn && onDelete && (
+          <button
+            className="workout-delete-btn"
+            onClick={() => onDelete(w)}
+            aria-label="Delete workout"
+          >×</button>
+        )}
       </div>
       {w.note && <p className="feed-note">"{w.note}"</p>}
       <div className="feed-card-bottom">

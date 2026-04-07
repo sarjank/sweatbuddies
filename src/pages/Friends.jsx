@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, writeBatch, arrayRemove } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import MonsterAvatar from "../components/MonsterAvatar/MonsterAvatar";
@@ -88,6 +88,21 @@ export default function Friends() {
     await fetchUserProfile(currentUser.uid);
     loadPending();
     flash("You're now buddies!");
+    setLoadingAction("");
+  }
+
+  async function handleRemoveFriend(friendUid) {
+    const friend = friends.find((f) => f.uid === friendUid);
+    const name = friend?.displayName || "this buddy";
+    if (!window.confirm(`Remove ${name} as a buddy?`)) return;
+    setLoadingAction("remove-" + friendUid);
+    const batch = writeBatch(db);
+    batch.update(doc(db, "users", currentUser.uid), { friends: arrayRemove(friendUid) });
+    batch.update(doc(db, "users", friendUid), { friends: arrayRemove(currentUser.uid) });
+    await batch.commit();
+    await fetchUserProfile(currentUser.uid);
+    loadFriends();
+    flash(`${name} removed.`);
     setLoadingAction("");
   }
 
@@ -220,7 +235,16 @@ export default function Friends() {
             <p className="muted">No buddies yet — find some in Add Buddy!</p>
           ) : (
             friends.map((f) => (
-              <FriendCard key={f.uid} friend={f} />
+              <div key={f.uid} className="friend-list-row">
+                <FriendCard friend={f} />
+                <button
+                  className="btn-remove-buddy"
+                  onClick={() => handleRemoveFriend(f.uid)}
+                  disabled={loadingAction === "remove-" + f.uid}
+                >
+                  {loadingAction === "remove-" + f.uid ? "…" : "Remove"}
+                </button>
+              </div>
             ))
           )}
         </div>

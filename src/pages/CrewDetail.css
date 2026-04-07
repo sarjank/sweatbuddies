@@ -188,6 +188,24 @@
   color: var(--text-muted);
 }
 
+.crew-remove-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.crew-remove-btn:hover {
+  color: var(--red);
+  border-color: var(--red)66;
+  background: #e9456011;
+}
+
 /* ── Add member ──────────────────────────────────────────── */
 .crew-add-form {
   display: flex;

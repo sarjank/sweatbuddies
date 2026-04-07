@@ -273,3 +273,34 @@
 .friend-count { color: var(--text-muted); font-size: 0.78rem; }
 
 .muted { color: var(--text-muted); }
+
+/* ── Friend list row with remove ─────────────────────────── */
+.friend-list-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.friend-list-row > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-remove-buddy {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.btn-remove-buddy:hover:not(:disabled) {
+  color: var(--red);
+  border-color: var(--red)66;
+  background: #e9456011;
+}
+.btn-remove-buddy:disabled { opacity: 0.4; cursor: not-allowed; }
