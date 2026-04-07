@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc, doc, updateDoc, increment } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import MonsterAvatar from "../components/MonsterAvatar/MonsterAvatar";
@@ -114,6 +114,14 @@ export default function Dashboard() {
       setError(err.message);
     }
     setLoading(false);
+  }
+
+  async function handleDeleteWorkout(workout) {
+    if (!window.confirm("Delete this workout? This can't be undone.")) return;
+    await deleteDoc(doc(db, "workouts", workout.id));
+    await updateDoc(doc(db, "users", currentUser.uid), { workoutCount: increment(-1) });
+    setWeekWorkouts((prev) => prev.filter((w) => w.id !== workout.id));
+    setAllWorkouts((prev) => prev.filter((w) => w.id !== workout.id));
   }
 
   const streak = calcStreak(allWorkouts.map((w) => w.workoutDate).filter(Boolean));
@@ -262,6 +270,13 @@ export default function Dashboard() {
                   <span>{TYPE_ICONS[w.type] || "💪"}</span>
                   <span>{TYPE_LABELS[w.type] || w.type}</span>
                 </div>
+                {isMe && (
+                  <button
+                    className="checkin-delete-btn"
+                    onClick={() => handleDeleteWorkout(w)}
+                    aria-label="Delete workout"
+                  >×</button>
+                )}
               </div>
             );
           })}
