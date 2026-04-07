@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, deleteDoc, doc, updateDoc, increment } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
-import MonsterAvatar from "../components/MonsterAvatar/MonsterAvatar";
+import MonsterAvatar, { MONSTER_TYPES } from "../components/MonsterAvatar/MonsterAvatar";
 import { calcStreak, calcLongestStreak, formatWorkoutDate } from "../utils/streak";
 import { computeBadges } from "../utils/badges";
 import "./Profile.css";
@@ -10,9 +10,15 @@ import "./Profile.css";
 const TYPE_ICONS = { cardio: "🏃", weights: "🏋️", both: "🔥" };
 
 export default function Profile() {
-  const { currentUser, userProfile } = useAuth();
+  const { currentUser, userProfile, fetchUserProfile } = useAuth();
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Edit state
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editMonster, setEditMonster] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     async function fetchWorkouts() {
@@ -28,6 +34,25 @@ export default function Profile() {
     }
     fetchWorkouts();
   }, [currentUser]);
+
+  function startEdit() {
+    setEditName(userProfile?.displayName || "");
+    setEditMonster(userProfile?.monsterType || MONSTER_TYPES[0]);
+    setEditing(true);
+  }
+
+  async function handleSaveProfile() {
+    const name = editName.trim();
+    if (!name) return;
+    setSaving(true);
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      displayName: name,
+      monsterType: editMonster,
+    });
+    await fetchUserProfile(currentUser.uid);
+    setSaving(false);
+    setEditing(false);
+  }
 
   async function handleDeleteWorkout(workout) {
     if (!window.confirm("Delete this workout? This can't be undone.")) return;
@@ -50,11 +75,53 @@ export default function Profile() {
       <div className="profile-header">
         <MonsterAvatar monsterType={userProfile?.monsterType} size="lg" />
         <div className="profile-header-text">
-          <h1>{userProfile?.displayName}</h1>
+          <div className="profile-name-row">
+            <h1>{userProfile?.displayName}</h1>
+            {!editing && (
+              <button className="profile-edit-btn" onClick={startEdit}>Edit</button>
+            )}
+          </div>
           {userProfile?.handle && <p className="profile-handle">@{userProfile.handle}</p>}
           <p className="profile-email">{currentUser.email}</p>
         </div>
       </div>
+
+      {editing && (
+        <div className="profile-edit-section">
+          <p className="profile-edit-label">Display Name</p>
+          <input
+            className="profile-edit-input"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            maxLength={40}
+            placeholder="Your name"
+            autoFocus
+          />
+
+          <p className="profile-edit-label">Choose Your Monster</p>
+          <div className="monster-picker">
+            {MONSTER_TYPES.map((type) => (
+              <button
+                key={type}
+                className={`monster-option${editMonster === type ? " monster-option--selected" : ""}`}
+                onClick={() => setEditMonster(type)}
+                aria-label={type}
+              >
+                <MonsterAvatar monsterType={type} size="md" />
+              </button>
+            ))}
+          </div>
+
+          <div className="profile-edit-actions">
+            <button className="btn-primary" onClick={handleSaveProfile} disabled={saving || !editName.trim()}>
+              {saving ? "Saving…" : "Save"}
+            </button>
+            <button className="profile-cancel-btn" onClick={() => setEditing(false)} disabled={saving}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {badges.length > 0 && (
         <div className="profile-badges">

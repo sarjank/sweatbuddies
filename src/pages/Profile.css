@@ -13,11 +13,127 @@
   margin-bottom: 1rem;
 }
 
+.profile-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.1rem;
+}
+
 .profile-header-text h1 {
   font-size: 1.25rem;
   color: var(--text);
-  margin: 0 0 0.1rem;
+  margin: 0;
 }
+
+.profile-edit-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.profile-edit-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Inline edit panel ───────────────────────────────────── */
+.profile-edit-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.profile-edit-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.profile-edit-input {
+  padding: 0.7rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+  color-scheme: dark;
+}
+.profile-edit-input:focus { border-color: var(--accent); }
+
+/* ── Monster picker grid ─────────────────────────────────── */
+.monster-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.monster-option {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.monster-option:hover {
+  border-color: var(--accent)66;
+  background: var(--bg-card-2);
+}
+.monster-option--selected {
+  border-color: var(--accent);
+  background: var(--accent-dark);
+  box-shadow: 0 0 0 1px var(--accent)44;
+}
+
+.profile-edit-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.profile-edit-actions .btn-primary {
+  flex: 1;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+}
+
+.profile-cancel-btn {
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.profile-cancel-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .profile-handle {
   color: var(--accent);
